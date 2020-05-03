@@ -2,6 +2,8 @@ Flock flock;
 
 int startingBoids = 150;
 int boidsPerClick = 20;
+boolean isMousePressed = false;
+boolean isAtrracting = true;
 
 
 void setup() 
@@ -19,14 +21,33 @@ void draw()
 {
   background(50);
   flock.run();
+  //isMousePressed = false;
 }
 
 // Add a new boid into the System
 void mousePressed() 
 {
-  for (int i = 0; i < boidsPerClick; i++) 
+  if(mouseButton == LEFT)
   {
-      flock.addBoid(new Boid(mouseX,mouseY));
+    isAtrracting = true;
+    isMousePressed=true;
   }
-  println(flock.boids.size());
+  else if(mouseButton == RIGHT)
+  {
+      isAtrracting = false;
+      isMousePressed=true;
+  }
+  else
+  {
+    for (int i = 0; i < boidsPerClick; i++) 
+    {
+        flock.addBoid(new Boid(mouseX,mouseY));
+    }
+    println(flock.boids.size());
+  }
+}
+
+void mouseReleased()
+{
+  isMousePressed = false;
 }

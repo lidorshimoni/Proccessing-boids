@@ -6,16 +6,17 @@ class Boid
   PVector position;
   PVector velocity;
   PVector acceleration;
-  float r;
-  float maxforce;    // Maximum steering force
-  float maxspeed;    // Maximum speed
+  float r = 2.0;
+  float maxforce = 0.1;    // Maximum steering force
+  float maxspeed = 5;    // Maximum speed
   
-  float seperationWeight = 3;
+  float seperationWeight = 7;
   float alignmentWeight = 1.5;
-  float cohesionWeight = 1.0;
+  float cohesionWeight = 2.0;
+  float targetWeight = 3.0;
   
   float neighbordist = 50;
-  float desiredseparation = 25.0f;
+  float desiredseparation = 12.0f;
   
   Boid(float x, float y) 
   {
@@ -28,11 +29,7 @@ class Boid
     float angle = random(TWO_PI);
     velocity = new PVector(cos(angle), sin(angle));
 
-    position = new PVector(x, y);
-    r = 2.0;
-    maxspeed = 2;
-    maxforce = 0.03;
-    
+    position = new PVector(x, y);   
     
   }
 
@@ -56,16 +53,20 @@ class Boid
     PVector sep = separate(boids);   // Separation
     PVector ali = align(boids);      // Alignment
     PVector coh = cohesion(boids);   // Cohesion
+    PVector target = mouseAttriction();      // Alignment
+
     
     // weight these forces
     sep.mult(this.seperationWeight);
     ali.mult(this.alignmentWeight);
     coh.mult(this.cohesionWeight);
+    target.mult(targetWeight);
     
     // Add the force vectors to acceleration
     applyForce(sep);
     applyForce(ali);
     applyForce(coh);
+    applyForce(target);
   }
 
   // Method to update position
@@ -222,6 +223,25 @@ class Boid
       return seek(sum);  // Steer towards the position
     } 
     else {
+      return new PVector(0, 0);
+    }
+  }
+  
+  PVector mouseAttriction()
+  {
+    PVector dir = new PVector(mouseX-this.position.x, mouseY-this.position.y);
+    if (isMousePressed)
+    {
+      dir.normalize();
+      dir.mult(maxspeed);
+      
+      dir.rotate(isAtrracting ? 0 : 180);
+      PVector steer = PVector.sub(dir, velocity);
+      steer.limit(maxforce);
+      return steer;
+    } 
+    else 
+    {
       return new PVector(0, 0);
     }
   }
