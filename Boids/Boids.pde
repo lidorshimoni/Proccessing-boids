@@ -19,7 +19,7 @@ void setup()
 
 void draw() 
 {
-  background(50);
+  background(45,41,38);
   flock.run();
   //isMousePressed = false;
 }

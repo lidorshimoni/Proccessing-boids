@@ -13,7 +13,7 @@ class Boid
   float seperationWeight = 7;
   float alignmentWeight = 1.5;
   float cohesionWeight = 2.0;
-  float targetWeight = 3.0;
+  float targetWeight = 2.0;
   
   float neighbordist = 50;
   float desiredseparation = 12.0f;
@@ -108,8 +108,8 @@ class Boid
     float theta = velocity.heading2D() + radians(90);
     // heading2D() above is now heading() but leaving old syntax until Processing.js catches up
     
-    fill(200, 100);
-    stroke(255);
+    fill(45,41,38);
+    stroke(233,75,60);
     pushMatrix();
     translate(position.x, position.y);
     rotate(theta);
